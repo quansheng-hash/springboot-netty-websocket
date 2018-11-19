@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqs.qctwe.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.wqs.qctwe.domain.User">
+    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="qrcode" jdbcType="VARCHAR" property="qrcode" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, username, password, nickname, img_url, qrcode, cid, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.wqs.qctwe.domain.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="imgUrl != null">
+        img_url,
+      </if>
+      <if test="qrcode != null">
+        qrcode,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wqs.qctwe.domain.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wqs.qctwe.domain.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="insert" parameterType="com.wqs.qctwe.domain.User">
+      insert into user (user_id, username, password,
+      nickname, img_url, qrcode,
+      cid )
+      values (#{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{nickname,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{qrcode,jdbcType=VARCHAR},
+      #{cid,jdbcType=VARCHAR})
+  </insert>
+  <select id="login" parameterType="com.wqs.qctwe.domain.User" resultMap="BaseResultMap">
+     SELECT user_id, username,  nickname, img_url, qrcode, cid, create_time, update_time FROM user
+     WHERE username=#{username} AND  password=#{password}
+  </select>
+  <select id="isUserExist" parameterType="java.lang.String" resultMap="BaseResultMap">
+      SELECT user_id, username,  nickname, img_url, qrcode, cid, create_time, update_time FROM user
+      WHERE username=#{username}
+  </select>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+      SELECT user_id, username,  nickname, img_url, qrcode, cid, create_time, update_time FROM user
+      WHERE user_id=#{userId}
+  </select>
+  <update id="updateNickname" parameterType="com.wqs.qctwe.domain.User">
+      UPDATE user
+       <if test=" nickname !=null and nickname != '' ">
+         SET nickname=#{nickname}
+       </if>
+      <if test=" imgUrl !=null and imgUrl != ''">
+        SET img_url=#{imgUrl}
+      </if>
+      WHERE user_id=#{userId}
+  </update>
+</mapper>

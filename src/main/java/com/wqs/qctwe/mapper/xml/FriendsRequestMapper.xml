@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqs.qctwe.mapper.FriendsRequestMapper">
+  <resultMap id="BaseResultMap" type="com.wqs.qctwe.domain.FriendsRequest">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="send_user_id" jdbcType="VARCHAR" property="sendUserId" />
+    <result column="accpet_user_id" jdbcType="VARCHAR" property="accpetUserId" />
+    <result column="request_date_time" jdbcType="TIMESTAMP" property="requestDateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, send_user_id, accpet_user_id, request_date_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from friends_request
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from friends_request
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wqs.qctwe.domain.FriendsRequest">
+    insert into friends_request (id, send_user_id, accpet_user_id, 
+      request_date_time)
+    values (#{id,jdbcType=VARCHAR}, #{sendUserId,jdbcType=VARCHAR}, #{accpetUserId,jdbcType=VARCHAR}, 
+      #{requestDateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wqs.qctwe.domain.FriendsRequest">
+    insert into friends_request
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sendUserId != null">
+        send_user_id,
+      </if>
+      <if test="accpetUserId != null">
+        accpet_user_id,
+      </if>
+      <if test="requestDateTime != null">
+        request_date_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sendUserId != null">
+        #{sendUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="accpetUserId != null">
+        #{accpetUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDateTime != null">
+        #{requestDateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wqs.qctwe.domain.FriendsRequest">
+    update friends_request
+    <set>
+      <if test="sendUserId != null">
+        send_user_id = #{sendUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="accpetUserId != null">
+        accpet_user_id = #{accpetUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDateTime != null">
+        request_date_time = #{requestDateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wqs.qctwe.domain.FriendsRequest">
+    update friends_request
+    set send_user_id = #{sendUserId,jdbcType=VARCHAR},
+      accpet_user_id = #{accpetUserId,jdbcType=VARCHAR},
+      request_date_time = #{requestDateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="slelectById" parameterType="com.wqs.qctwe.domain.FriendsRequest" resultMap="BaseResultMap">
+     SELECT send_user_id,accpet_user_id,id FROM  friends_request
+     WHERE accpet_user_id=#{accpetUserId} AND  send_user_id=#{sendUserId}
+  </select>
+  <select id="getRequestList" parameterType="java.lang.String" resultType="com.wqs.qctwe.domain.User">
+    SELECT u.user_id AS userId,u.nickname,u.username,u.img_url AS imgUrl FROM  user u
+      LEFT JOIN friends_request fr ON u.user_id=fr.send_user_id
+      WHERE fr.accpet_user_id=#{acceptUserId}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    DELETE  FROM friends_request WHERE accpet_user_id=#{accpetUserId} AND send_user_id=#{sendUserId}
+  </delete>
+
+</mapper>

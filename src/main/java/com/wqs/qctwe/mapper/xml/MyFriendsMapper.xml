@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqs.qctwe.mapper.MyFriendsMapper">
+  <resultMap id="BaseResultMap" type="com.wqs.qctwe.domain.MyFriends">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="my_user_id" jdbcType="VARCHAR" property="myUserId" />
+    <result column="my_friend_user_id" jdbcType="VARCHAR" property="myFriendUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, my_user_id, my_friend_user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from my_friends
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from my_friends
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.wqs.qctwe.domain.MyFriends">
+    insert into my_friends (id, my_user_id, my_friend_user_id, 
+      create_time)
+    values (#{id,jdbcType=VARCHAR}, #{myUserId,jdbcType=VARCHAR}, #{myFriendUserId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wqs.qctwe.domain.MyFriends">
+    insert into my_friends
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="myUserId != null">
+        my_user_id,
+      </if>
+      <if test="myFriendUserId != null">
+        my_friend_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="myUserId != null">
+        #{myUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="myFriendUserId != null">
+        #{myFriendUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wqs.qctwe.domain.MyFriends">
+    update my_friends
+    <set>
+      <if test="myUserId != null">
+        my_user_id = #{myUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="myFriendUserId != null">
+        my_friend_user_id = #{myFriendUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wqs.qctwe.domain.MyFriends">
+    update my_friends
+    set my_user_id = #{myUserId,jdbcType=VARCHAR},
+      my_friend_user_id = #{myFriendUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getById" parameterType="java.lang.String" resultMap="BaseResultMap">
+       SELECT my_user_id,my_friend_user_id,id FROM my_friends
+       WHERE my_user_id=#{myUserId} AND my_friend_user_id=#{myFriendsUserId}
+  </select>
+  <select id="getFriendsListByUserId" parameterType="java.lang.String" resultType="com.wqs.qctwe.domain.User">
+
+    SELECT u.user_id AS userId,u.username,u.nickname,u.img_url AS imgUrl FROM  user u
+        LEFT JOIN  my_friends mf ON u.user_id=mf.my_friend_user_id
+        WHERE mf.my_user_id=#{userId}
+
+  </select>
+</mapper>
